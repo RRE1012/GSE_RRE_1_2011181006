@@ -21,7 +21,7 @@ public:
 	float GetColorR();
 	float GetColorG();
 	float GetColorB();
-
+	void SetCollideColor();
 	void SetPos(float, float, float);
 	void Update();
 };

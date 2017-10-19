@@ -5,3 +5,5 @@
 #include <stdio.h>
 #include <tchar.h>
 #include "Object.h"
+#include "SceneMgr.h"
+#include <random>

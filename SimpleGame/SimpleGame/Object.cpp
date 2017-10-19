@@ -1,16 +1,23 @@
 #include "stdafx.h"
 #include "Object.h"
-
+#include <stdlib.h>
 
 Object::Object()
 {
-	posX = 10.0f;
-	posY = 10.0f;
+	//std::uniform_int_distribution<__int64> uniformDist(1, 45);
+
+	posX = rand() % 490 -245;
+	//posX = 10.0f;
+	posY = rand() % 490 -245;
 	posZ = 10.0f;
-	objSize = 20.0f;
-	speedX = 0.5f;
-	speedY = 0.8f;
+	objSize = 5.0f;
+	speedX = (rand()%5-2.5);
+	speedY = (rand() % 5 - 2.5);
 	count = 0;
+	red = 1.0f;
+	green = 1.0f;
+	blue = 1.0f;
+	
 }
 
 Object::Object(float px, float py, float pz, float size, float speed) {
@@ -44,12 +51,26 @@ float Object::GetSize() {
 
 	return objSize;
 }
+float Object::GetColorR() {
+	return red;
+}
+float Object::GetColorG() {
+	return green;
+}
+float Object::GetColorB() {
+	return blue;
+}
 
 void Object::SetPos(float x, float y, float z) {
 	posX = x;
 	posY = y;
 	posZ = z;
 
+}
+void Object::SetCollideColor() {
+	red = 1.0f;
+	green = 0.0f;
+	blue = 0.0f;
 }
 void Object::Update() {
 	//count = (count + 1) % (int)objSize;
@@ -67,4 +88,5 @@ void Object::Update() {
 		speedY = speedY*(-1);
 	else if (posY - (objSize / 2) < -250)
 		speedY = speedY*(-1);
+	
 }

@@ -10,6 +10,7 @@ private:
 	float speedX, speedY;
 	float red, green, blue;
 	int count;
+	float life;
 public:
 	Object();
 	Object(float px, float py, float pz, float size,float speed);
@@ -22,7 +23,12 @@ public:
 	float GetColorG();
 	float GetColorB();
 	void SetCollideColor();
+	void ReturnColor();
 	void SetPos(float, float, float);
-	void Update();
+	float GetLife();
+	void SetLife();
+
+	void Update(float );
+
 };
 

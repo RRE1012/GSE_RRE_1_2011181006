@@ -1,6 +1,7 @@
+#include <stdlib.h>
 #include "stdafx.h"
 #include "Object.h"
-#include <stdlib.h>
+
 
 Object::Object()
 {
@@ -10,13 +11,14 @@ Object::Object()
 	//posX = 10.0f;
 	posY = rand() % 490 -245;
 	posZ = 10.0f;
-	objSize = 5.0f;
-	speedX = (rand()%5-2.5);
-	speedY = (rand() % 5 - 2.5);
+	objSize = 10.0f;
+	speedX = (rand()%1-0.5);
+	speedY = (rand() % 1 - 0.5);
 	count = 0;
 	red = 1.0f;
 	green = 1.0f;
 	blue = 1.0f;
+	life = 10.0f;
 	
 }
 
@@ -28,7 +30,7 @@ Object::Object(float px, float py, float pz, float size, float speed) {
 	speedX = speed;
 	speedY = speed;
 	count = 0;
-
+	life = 10.0f;
 }
 Object::~Object()
 {
@@ -72,21 +74,43 @@ void Object::SetCollideColor() {
 	green = 0.0f;
 	blue = 0.0f;
 }
-void Object::Update() {
+void Object::ReturnColor() {
+	red = 1.0f;
+	green = 1.0f;
+	blue = 1.0f;
+}
+
+void Object::Update(float time) {
 	//count = (count + 1) % (int)objSize;
-	float elapsedTime = 1.5f;
+	float elapsedTime = time/10.0f;
 
 	if (count == 0) {
 		posX =posX+ (speedX*elapsedTime);
 		posY = posY +(speedY*elapsedTime);
 	}
-	if (posX+(objSize/2) > 250)
+	if (posX + (objSize / 2) > 250) {
 		speedX = speedX*(-1);
-	else if (posX - (objSize / 2) < -250)
+		life -= 1.0f;
+	}
+	else if (posX - (objSize / 2) < -250) {
 		speedX = speedX*(-1);
-	if (posY + (objSize / 2) > 250)
+		life -= 1.0f;
+	}
+	if (posY + (objSize / 2) > 250) {
 		speedY = speedY*(-1);
-	else if (posY - (objSize / 2) < -250)
+		life -= 1.0f;
+	}
+	else if (posY - (objSize / 2) < -250) {
 		speedY = speedY*(-1);
+		life -= 1.0f;
+	}
 	
+		
+	
+}
+float Object::GetLife() {
+	return life;
+}
+void Object::SetLife() {
+	life = life - 1.0f;;
 }

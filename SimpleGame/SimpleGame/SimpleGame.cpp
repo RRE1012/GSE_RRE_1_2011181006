@@ -14,30 +14,36 @@ but WITHOUT ANY WARRANTY.
 #include "Dependencies\freeglut.h"
 #include "Renderer.h"
 
-Renderer *g_Renderer = NULL;
-SceneMgr s_Mgr;
+//Renderer *g_Renderer = NULL;
+SceneMgr *s_Mgr=NULL; //포인터 NULL값으로 초기화 반드시 할 것
 
 //Object obj;
 //Object obj2(5.0f, 2.0f, 1.0f, 15, 0.9f);
 bool g_LButtonDown = false;
+DWORD g_prevTime = 0;
+
 void RenderScene(void)
 {
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
 	
 	// Renderer Test
-	g_Renderer->DrawSolidRect(0, 0, 0, 4, 1, 0, 1, 1);
-	//g_Renderer->DrawSolidRect(obj.GetPosX(), obj.GetPosY(), obj.GetPosZ(), obj.GetSize(), 1, 0.4f, 0, 1);
-	//g_Renderer->DrawSolidRect(obj2.GetPosX(), obj2.GetPosY(), obj2.GetPosZ(), obj2.GetSize(), 1, 1, 0, 1);
-	for (int i = 0; i < s_Mgr.GetPushNum(); ++i) {
-		g_Renderer->DrawSolidRect(s_Mgr.GetObject0(i).GetPosX(), s_Mgr.GetObject0(i).GetPosY(), s_Mgr.GetObject0(i).GetPosZ(), s_Mgr.GetObject0(i).GetSize(), s_Mgr.GetObject0(i).GetColorR(), s_Mgr.GetObject0(i).GetColorG(), s_Mgr.GetObject0(i).GetColorB(), 1);
-	}
+	
+
+	s_Mgr->DrawObject();
+	DWORD currTime = timeGetTime();
+	DWORD elapsedTime = currTime - g_prevTime;
+	
+	g_prevTime = currTime; //현재 elapse된 시간을 다시 갱신
+//2017.09->	g_Renderer->DrawSolidRect(s_Mgr.GetObject0(i).GetPosX(), s_Mgr.GetObject0(i).GetPosY(), s_Mgr.GetObject0(i).GetPosZ(), s_Mgr.GetObject0(i).GetSize(), s_Mgr.GetObject0(i).GetColorR(), s_Mgr.GetObject0(i).GetColorG(), s_Mgr.GetObject0(i).GetColorB(), 1);
+	s_Mgr->UpdateObj(elapsedTime);
 	glutSwapBuffers();
 }
 void Loop(int state) {
 	//obj.Update();
 	//obj2.Update();
-	s_Mgr.UpdateObj();
+	
 	glutTimerFunc(1, Loop, 0);
 
 }
@@ -89,9 +95,7 @@ int main(int argc, char **argv)
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(500, 500);
 	glutCreateWindow("Game Software Engineering KPU");
-	s_Mgr.MaxAdd();
 	
-	Loop(1);
 	glewInit();
 	if (glewIsSupported("GL_VERSION_3_0"))
 	{
@@ -101,23 +105,26 @@ int main(int argc, char **argv)
 	{
 		std::cout << "GLEW 3.0 not supported\n ";
 	}
-
+	s_Mgr = new SceneMgr();
+	s_Mgr->MaxAdd();
+	Loop(1);
 	// Initialize Renderer
-	g_Renderer = new Renderer(500, 500);
-	if (!g_Renderer->IsInitialized())
-	{
-		std::cout << "Renderer could not be initialized.. \n";
-	}
+	
+	//g_Renderer = new Renderer(500, 500);
+//	if (!g_Renderer->IsInitialized())
+//	{
+	//	std::cout << "Renderer could not be initialized.. \n";
+	//}
 	
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
 	glutKeyboardFunc(KeyInput);
 	glutMouseFunc(MouseInput);
 	glutSpecialFunc(SpecialKeyInput);
-
+	g_prevTime = timeGetTime();
 	glutMainLoop();
 
-	delete g_Renderer;
+	//delete g_Renderer;
 
     return 0;
 }

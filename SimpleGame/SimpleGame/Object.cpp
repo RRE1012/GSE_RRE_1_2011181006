@@ -21,6 +21,46 @@ Object::Object()
 	life = 10.0f;
 	
 }
+Object::Object(float px, float py,int ty)
+{
+	posX = px;
+	posY = py;
+	speedX = 20.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
+	speedY = 20.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
+	if (ty == 1) {
+		speedX = 0.f;
+		speedY = 0.f;
+		objSize = 500;
+		red = 1.0f;
+		green = 1.0f;
+		blue = 0.0f;
+		life = 500.0f;
+	}
+	else if (ty == 2) {
+		objSize = 10;
+		red = 1.0f;
+		green = 1.0f;
+		blue = 1.0f;
+		life = 10.0f;
+	}
+	else if (ty == 3) {
+		objSize = 5;
+		red = 1.0f;
+		green = 0.0f;
+		blue = 1.0f;
+		life = 20.0f;
+	}
+	else if (ty == 4) {
+		objSize = 100;
+		red = 0.0f;
+		green = 1.0f;
+		blue = 0.0f;
+		life = 10.0f;
+	}
+	life = 10.0f;
+	count = 0;
+	type = ty;
+}
 
 Object::Object(float px, float py, float pz, float size, float speed,int ty) {
 	posX = px;

@@ -42,8 +42,7 @@ void RenderScene(void)
 }
 int tempcount = 0;
 void Loop(int state) {
-	//obj.Update();
-	//obj2.Update();
+	
 	tempcount=(tempcount+1)%500;
 	if (tempcount % 100 == 0)
 		printf("life :%f\n",s_Mgr->GetObject0(0).GetLife());

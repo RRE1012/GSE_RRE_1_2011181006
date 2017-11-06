@@ -14,8 +14,9 @@ private:
 	int type;
 public:
 	Object();
+	Object(float px, float py,int ty);
 	Object(float px, float py, float pz, float size,float speed,int type);
-	Object(float,float,float,float , float , float , float , float ,float,int);
+	Object(float x,float y,float z ,float r, float g, float b, float size, float speed,float heart,int ty);
 
 	~Object();
 	float GetPosX();

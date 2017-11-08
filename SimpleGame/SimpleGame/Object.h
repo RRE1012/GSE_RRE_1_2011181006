@@ -28,6 +28,7 @@ public:
 	float GetColorB();
 	void SetCollideColor();
 	void ReturnColor();
+	void ReturnColor(int type);
 	void SetPos(float, float, float);
 	int GetType();
 	float GetLife();

@@ -89,19 +89,20 @@ void SceneMgr::IsCollide(int num) {
 
 	}
 	else
-		m_ob[num]->ReturnColor();
+		m_ob[num]->ReturnColor(m_ob[num]->GetType());
 	
 }
 
 void SceneMgr::UpdateObj(float time) {
 	live_count += 1;
 	bull_count = (bull_count + 1) % 500;
+	float elapsedTime = time / 10.0f;
 	for (int i = 0; i < push_count; ++i) {
 		//bull_ob[i]->Update(time);
 		
 		m_ob[i]->Update(time);
-		if (m_ob[i]->GetType() == 1 &&m_ob[i]->GetLife()>0&&bull_count%100==0) {
-			
+		if (m_ob[i]->GetType() == 1 &&m_ob[i]->GetLife()>0&& bull_count%40==0) {
+			printf("elapsed Time : %.2f\n", elapsedTime);
 			
 			AddActorObject(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), 3);
 		}

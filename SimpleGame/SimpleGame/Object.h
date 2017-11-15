@@ -12,6 +12,8 @@ private:
 	int count;
 	float life;
 	int type;
+	float cooltime =0;
+	int follow=0;
 public:
 	Object();
 	Object(float px, float py,int ty);
@@ -22,10 +24,16 @@ public:
 	float GetPosX();
 	float GetPosY();
 	float GetPosZ();
+	float GetSpeedX();
+	float GetSpeedY();
+
 	float GetSize();
 	float GetColorR();
 	float GetColorG();
 	float GetColorB();
+	void Cooltime(float );
+	float GetCoolTime();
+	void ResetCoolTime();
 	void SetCollideColor();
 	void ReturnColor();
 	void ReturnColor(int type);
@@ -33,7 +41,8 @@ public:
 	int GetType();
 	float GetLife();
 	void SetLife(float);
-	
+	void SetFollow(int);
+	int GetFollow();
 
 	void Update(float );
 

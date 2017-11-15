@@ -1,5 +1,5 @@
 #pragma once
-#define MAX_OBJECTS_COUNT 10
+#define MAX_OBJECTS_COUNT 255
 #include "Object.h"
 #include "Renderer.h"
 #include "stdafx.h"
@@ -26,13 +26,14 @@ public:
 	
 	void AddObject();
 	void AddObject(int);
-	void AddActorObject(float,float,int);
+	void AddActorObject(float,float,int,int);
 	void MaxAdd();
 	void UpdateObj(float);
 	Object GetObject0(int);
 	int GetPushNum();
 	void IsCollide(int);
 	void DrawObject();
+	void DrawObjectPNG();
 	void MakeShootBullet(Object&);
 	SceneMgr();
 	~SceneMgr();

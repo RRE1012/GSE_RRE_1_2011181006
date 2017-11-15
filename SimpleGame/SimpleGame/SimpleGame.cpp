@@ -14,11 +14,10 @@ but WITHOUT ANY WARRANTY.
 #include "Dependencies\freeglut.h"
 #include "Renderer.h"
 
-//Renderer *g_Renderer = NULL;
+
 SceneMgr *s_Mgr=NULL; //포인터 NULL값으로 초기화 반드시 할 것
 
-//Object obj;
-//Object obj2(5.0f, 2.0f, 1.0f, 15, 0.9f);
+
 bool g_LButtonDown = false;
 DWORD g_prevTime = 0;
 
@@ -54,7 +53,7 @@ void Idle(void)
 {
 	RenderScene();
 	
-	//glutTimerFunc(20, obj2.Update, 0);
+
 }
 
 
@@ -70,7 +69,7 @@ void MouseInput(int button, int state, int x, int y)
 	}
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
 		if (g_LButtonDown) {
-			s_Mgr->AddActorObject(x - 250, -(y - 250), OBJECT_CHARACTER);
+			s_Mgr->AddActorObject(x - 250, -(y - 250), OBJECT_CHARACTER,0);
 			//obj.SetPos(x-250, -(y-250), obj.GetPosZ());
 			printf("x : %d\ny : %d\n", x,y);
 			g_LButtonDown = false;
@@ -109,7 +108,7 @@ int main(int argc, char **argv)
 		std::cout << "GLEW 3.0 not supported\n ";
 	}
 	s_Mgr = new SceneMgr();
-	s_Mgr->AddActorObject(0, 0, OBJECT_BUILDING);
+	s_Mgr->AddActorObject(0, 0, OBJECT_BUILDING,0);
 
 	//s_Mgr->AddActorObject(0, 0, OBJECT_BULLET);
 	//s_Mgr->AddActorObject(0, 0, OBJECT_ARROW);

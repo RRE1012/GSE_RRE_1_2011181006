@@ -19,17 +19,18 @@ Object::Object()
 	life = 10.0f;
 	
 }
-Object::Object(float px, float py,int ty)
+Object::Object(float px, float py,int ty, int teamname)
 {
 	posX = px;
 	posY = py;
 	speedX = 200.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
 	speedY = 200.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
+	team = teamname;
 	if (ty == 1)
 	{
 		speedX = 0.f;
 		speedY = 0.f;
-		objSize = 500;
+		objSize = 100;
 		red = 1.0f;
 		green = 1.0f;
 		blue = 0.0f;
@@ -40,9 +41,18 @@ Object::Object(float px, float py,int ty)
 		speedX = 300.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
 		speedY = 300.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
 		objSize = 20;
-		red = 1.0f;
-		green = 1.0f;
-		blue = 1.0f;
+		if (team == TEAM_1)
+		{
+			red = 1.0f;
+			green = 0.0f;
+			blue = 0.0f;
+		}
+		else
+		{
+			red = 0.0f;
+			green = 0.0f;
+			blue = 1.0f;
+		}
 		life = 10.0f;
 	}
 	else if (ty == 3) 
@@ -50,9 +60,18 @@ Object::Object(float px, float py,int ty)
 		speedX = 600.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
 		speedY = 600.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
 		objSize = 5;
-		red = 1.0f;
-		green = 0.0f;
-		blue = 1.0f;
+		if (team == TEAM_1)
+		{
+			red = 1.0f;
+			green = 0.0f;
+			blue = 0.0f;
+		}
+		else
+		{
+			red = 0.0f;
+			green = 0.0f;
+			blue = 1.0f;
+		}
 		life = 20.0f;
 	}
 	else if (ty == 4)
@@ -60,9 +79,18 @@ Object::Object(float px, float py,int ty)
 		speedX = 100.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
 		speedY = 100.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
 		objSize = 10;
-		red = 0.0f;
-		green = 1.0f;
-		blue = 0.0f;
+		if (team == TEAM_1)
+		{
+			red = 0.5f;
+			green = 0.2f;
+			blue = 0.7f;
+		}
+		else
+		{
+			red = 1.0f;
+			green = 1.0f;
+			blue = 0.0f;
+		}
 		life = 10.0f;
 	}
 	
@@ -167,23 +195,44 @@ void Object::ReturnColor(int type)
 		green = 1.0f;
 		blue = 0.0f;
 	}
-	if (type == 2) 
+	if (type == 2&&team==TEAM_1) 
 	{
 		red = 1.0f;
-		green = 1.0f;
+		green =0.0f;
+		blue = 0.0f;
+	}
+	else if (type == 2 && team == TEAM_2)
+	{
+		red = 0.0f;
+		green = 0.0f;
 		blue = 1.0f;
 	}
-	if (type == 3) 
+	if (type == 3&&team==TEAM_1) 
 	{
 		red = 1.0f;
 		green = 0.0f;
 		blue = 0.0f;
 	}
-	if (type == 4) 
+	else if (type == 3 && team == TEAM_2)
 	{
 		red = 0.0f;
-		green = 1.0f;
-		blue = 0.0f;
+		green = 0.0f;
+		blue = 1.0f;
+	}
+	if (type == 4) 
+	{
+		if (team == TEAM_1)
+		{
+			red = 0.5f;
+			green = 0.2f;
+			blue = 0.7f;
+		}
+		else
+		{
+			red = 1.0f;
+			green = 1.0f;
+			blue = 0.0f;
+		}
 	}
 }
 void Object::Update(float time) 
@@ -205,12 +254,12 @@ void Object::Update(float time)
 		speedX = speedX*(-1);
 		
 	}
-	if (posY + (objSize / 2) > 250)
+	if (posY + (objSize / 2) > 400)
 	{
 		speedY = speedY*(-1);
 		
 	}
-	else if (posY - (objSize / 2) < -250) 
+	else if (posY - (objSize / 2) < -400) 
 	{
 		speedY = speedY*(-1);
 		
@@ -225,7 +274,10 @@ float Object::GetLife()
 }
 void Object::SetLife(float a) 
 {
-	life = life - a;
+	if (a < 0)
+		life = life - 10.0f;
+	else
+		life = life - a;
 }
 
 int Object::GetType() 
@@ -255,4 +307,9 @@ void Object::SetFollow(int a)
 int Object::GetFollow() 
 {
 	return follow;
+}
+
+int Object::GetTeam()
+{
+	return team;
 }

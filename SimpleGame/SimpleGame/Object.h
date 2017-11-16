@@ -1,6 +1,8 @@
 #pragma once
 
 //#include <utility>
+#define TEAM_1 1001
+#define TEAM_2 2002
 class Object
 {
 private:
@@ -14,9 +16,10 @@ private:
 	int type;
 	float cooltime =0;
 	int follow=0;
+	int team;
 public:
 	Object();
-	Object(float px, float py,int ty);
+	Object(float px, float py,int ty, int teamname);
 	Object(float px, float py, float pz, float size,float speed,int type);
 	Object(float x,float y,float z ,float r, float g, float b, float size, float speed,float heart,int ty);
 
@@ -26,7 +29,7 @@ public:
 	float GetPosZ();
 	float GetSpeedX();
 	float GetSpeedY();
-
+	int GetTeam();
 	float GetSize();
 	float GetColorR();
 	float GetColorG();

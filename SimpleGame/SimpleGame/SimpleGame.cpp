@@ -37,6 +37,7 @@ void RenderScene(void)
 	g_prevTime = currTime; //현재 elapse된 시간을 다시 갱신
 //2017.09->	g_Renderer->DrawSolidRect(s_Mgr.GetObject0(i).GetPosX(), s_Mgr.GetObject0(i).GetPosY(), s_Mgr.GetObject0(i).GetPosZ(), s_Mgr.GetObject0(i).GetSize(), s_Mgr.GetObject0(i).GetColorR(), s_Mgr.GetObject0(i).GetColorG(), s_Mgr.GetObject0(i).GetColorB(), 1);
 	s_Mgr->UpdateObj(elapsedTime);
+	s_Mgr->MakeObj(elapsedTime);
 	glutSwapBuffers();
 }
 int tempcount = 0;
@@ -69,7 +70,12 @@ void MouseInput(int button, int state, int x, int y)
 	}
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
 		if (g_LButtonDown) {
-			s_Mgr->AddActorObject(x - 250, -(y - 250), OBJECT_CHARACTER,0);
+			if(s_Mgr->GetCoolTime()>=7.0f && y>400)
+			{
+				s_Mgr->AddActorObject(x - 250, -(y - 400), OBJECT_CHARACTER, 0);
+				s_Mgr->ResetCoolTime();
+			}
+			
 			//obj.SetPos(x-250, -(y-250), obj.GetPosZ());
 			printf("x : %d\ny : %d\n", x,y);
 			g_LButtonDown = false;
@@ -95,7 +101,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);
-	glutInitWindowSize(500, 500);
+	glutInitWindowSize(500, 800);
 	glutCreateWindow("Game Software Engineering KPU");
 	
 	glewInit();
@@ -108,7 +114,12 @@ int main(int argc, char **argv)
 		std::cout << "GLEW 3.0 not supported\n ";
 	}
 	s_Mgr = new SceneMgr();
-	s_Mgr->AddActorObject(0, 0, OBJECT_BUILDING,0);
+	s_Mgr->AddActorObject(150,320, OBJECT_BUILDING,0);
+	s_Mgr->AddActorObject(0, 350, OBJECT_BUILDING, 0);
+	s_Mgr->AddActorObject(-150, 320, OBJECT_BUILDING, 0);
+	s_Mgr->AddActorObject(150, -320, OBJECT_BUILDING, 0);
+	s_Mgr->AddActorObject(0, -350, OBJECT_BUILDING, 0);
+	s_Mgr->AddActorObject(-150, -320, OBJECT_BUILDING, 0);
 
 	//s_Mgr->AddActorObject(0, 0, OBJECT_BULLET);
 	//s_Mgr->AddActorObject(0, 0, OBJECT_ARROW);

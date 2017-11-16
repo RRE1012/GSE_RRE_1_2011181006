@@ -16,11 +16,12 @@ class SceneMgr
 	Renderer *renderer;
 	int push_count = 0;
 	int bull_count = 0;
-
+	float cooltime = 0;
+	float clickCooltime = 0;
 	Object* m_ob[MAX_OBJECTS_COUNT];
 	Object* bull_ob[MAX_OBJECTS_COUNT];
 	int dead_ob[MAX_OBJECTS_COUNT];
-	int live_count = 0;
+	
 
 public:
 	
@@ -29,12 +30,16 @@ public:
 	void AddActorObject(float,float,int,int);
 	void MaxAdd();
 	void UpdateObj(float);
+	void MakeObj(float);
 	Object GetObject0(int);
 	int GetPushNum();
 	void IsCollide(int);
 	void DrawObject();
 	void DrawObjectPNG();
 	void MakeShootBullet(Object&);
+	void AddTime(float);
+	float GetCoolTime();
+	void ResetCoolTime();
 	SceneMgr();
 	~SceneMgr();
 };

@@ -35,6 +35,8 @@ Object::Object(float px, float py,int ty, int teamname)
 		green = 1.0f;
 		blue = 0.0f;
 		life = 500.0f;
+		level = LEVEL_SKY;
+		posZ = 0;
 	}
 	else if (ty == 2) 
 	{
@@ -53,7 +55,8 @@ Object::Object(float px, float py,int ty, int teamname)
 			green = 0.0f;
 			blue = 1.0f;
 		}
-		life = 10.0f;
+		life = 100.0f;
+		level = LEVEL_GROUND;
 	}
 	else if (ty == 3) 
 	{
@@ -73,6 +76,7 @@ Object::Object(float px, float py,int ty, int teamname)
 			blue = 1.0f;
 		}
 		life = 20.0f;
+		level = LEVEL_UNDERGROUND;
 	}
 	else if (ty == 4)
 	{
@@ -92,6 +96,7 @@ Object::Object(float px, float py,int ty, int teamname)
 			blue = 0.0f;
 		}
 		life = 10.0f;
+		level = LEVEL_UNDERGROUND;
 	}
 	
 	count = 0;
@@ -238,36 +243,41 @@ void Object::ReturnColor(int type)
 void Object::Update(float time) 
 {
 	float elapsedTime = time/1000.0f;
-
+	
 	if (count == 0) 
 	{
 		posX =posX+ (speedX*elapsedTime);
 		posY = posY +(speedY*elapsedTime);
 	}
-	if (posX + (objSize / 2) > 250) 
+	if (type == 2)
 	{
-		speedX = speedX*(-1);
-		
+		if (posX + (objSize / 2) > 250)
+		{
+			speedX = speedX*(-1);
+
+		}
+		else if (posX - (objSize / 2) < -250)
+		{
+			speedX = speedX*(-1);
+
+		}
+		if (posY + (objSize / 2) > 400)
+		{
+			speedY = speedY*(-1);
+
+		}
+		else if (posY - (objSize / 2) < -400)
+		{
+			speedY = speedY*(-1);
+
+		}
 	}
-	else if (posX - (objSize / 2) < -250)
-	{
-		speedX = speedX*(-1);
-		
-	}
-	if (posY + (objSize / 2) > 400)
-	{
-		speedY = speedY*(-1);
-		
-	}
-	else if (posY - (objSize / 2) < -400) 
-	{
-		speedY = speedY*(-1);
-		
-	}
-	
-		
 	
 }
+	
+		
+	
+
 float Object::GetLife() 
 {
 	return life;

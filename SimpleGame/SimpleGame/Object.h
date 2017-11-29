@@ -3,6 +3,11 @@
 //#include <utility>
 #define TEAM_1 1001
 #define TEAM_2 2002
+#define LEVEL_GOD 0
+#define LEVEL_SKY 0.1
+#define LEVEL_GROUND 0.2
+#define LEVEL_UNDERGROUND 0.3
+
 class Object
 {
 private:
@@ -17,6 +22,7 @@ private:
 	float cooltime =0;
 	int follow=0;
 	int team;
+	float level;
 public:
 	Object();
 	Object(float px, float py,int ty, int teamname);
@@ -46,7 +52,7 @@ public:
 	void SetLife(float);
 	void SetFollow(int);
 	int GetFollow();
-
+	float GetLevel() { return level; };
 	void Update(float );
 
 };

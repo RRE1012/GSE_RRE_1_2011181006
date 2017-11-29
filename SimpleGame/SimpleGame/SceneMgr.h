@@ -1,5 +1,5 @@
 #pragma once
-#define MAX_OBJECTS_COUNT 255
+#define MAX_OBJECTS_COUNT 256
 #include "Object.h"
 #include "Renderer.h"
 #include "stdafx.h"

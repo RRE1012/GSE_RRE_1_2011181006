@@ -49,18 +49,39 @@ int SceneMgr::GetPushNum() {
 void SceneMgr::DrawObject() {
 	GLuint m_texCharacter = renderer->CreatePngTexture("./Textures/Building.png");
 	GLuint m_texCharacter2 = renderer->CreatePngTexture("./Textures/house.png");
+	GLuint m_texCharacter3 = renderer->CreatePngTexture("./Textures/Kid_Enemy01.png");
+	GLuint m_texCharacter4 = renderer->CreatePngTexture("./Textures/Character_Team.png");
+
 
 	float a = 1;
 	for (int i = 0; i < push_count; ++i) {
 		if (m_ob[i]->GetType() == 1) {
-			if(m_ob[i]->GetTeam()==TEAM_1)
-				renderer->DrawTexturedRect(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), m_ob[i]->GetColorR(), m_ob[i]->GetColorG(), m_ob[i]->GetColorB(), a, m_texCharacter);
-			else
-				renderer->DrawTexturedRect(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), m_ob[i]->GetColorR(), m_ob[i]->GetColorG(), m_ob[i]->GetColorB(), a, m_texCharacter2);
+			if (m_ob[i]->GetTeam() == TEAM_1) {
+				renderer->DrawTexturedRect(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), 1, 1, 1, a, m_texCharacter, m_ob[i]->GetLevel());
+				renderer->DrawSolidRectGauge(m_ob[i]->GetPosX(), m_ob[i]->GetPosY() + (m_ob[i]->GetSize() / 2), m_ob[i]->GetPosZ(), 50, 10, 0, 0, 1, a, m_ob[i]->GetLife()/500, 0.3);
+				
+			}
+			else {
+				renderer->DrawTexturedRect(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(),1, 1, 1, a, m_texCharacter2, m_ob[i]->GetLevel());
+				renderer->DrawSolidRectGauge(m_ob[i]->GetPosX(), m_ob[i]->GetPosY() + (m_ob[i]->GetSize() / 2), m_ob[i]->GetPosZ(), 50, 10, 1, 0, 0, a, m_ob[i]->GetLife() / 500, 0.3);
+			}
 		}
-		else
-			renderer->DrawSolidRect(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), m_ob[i]->GetColorR(), m_ob[i]->GetColorG(), m_ob[i]->GetColorB(), 1);
-		
+		else if(m_ob[i]->GetType() == 2){
+
+			
+			if (m_ob[i]->GetTeam() == TEAM_2) {
+				renderer->DrawTexturedRect(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), 1, 1, 1, a, m_texCharacter3, m_ob[i]->GetLevel());
+
+				renderer->DrawSolidRectGauge(m_ob[i]->GetPosX(), m_ob[i]->GetPosY() + (m_ob[i]->GetSize() / 2), m_ob[i]->GetPosZ(), 50, 10, 1, 0, 0, a, m_ob[i]->GetLife() / 100, 0.3);
+			}
+			else {
+				renderer->DrawSolidRectGauge(m_ob[i]->GetPosX(), m_ob[i]->GetPosY() + (m_ob[i]->GetSize() / 2), m_ob[i]->GetPosZ(), 50, 10, 0, 0, 1, a, m_ob[i]->GetLife() / 100, 0.3);
+				renderer->DrawTexturedRect(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), 1, 1, 1, a, m_texCharacter4, m_ob[i]->GetLevel());
+			}
+		}
+		else {
+			renderer->DrawSolidRect(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), m_ob[i]->GetColorR(), m_ob[i]->GetColorG(), m_ob[i]->GetColorB(), 1, m_ob[i]->GetLevel());
+		}
 
 	}
 }
@@ -69,7 +90,7 @@ void SceneMgr::DrawObjectPNG() {
 	GLuint m_texCharacter = renderer->CreatePngTexture("./Textures/PNGs/spritestrip_6Seq.png");
 
 	for (int i = 0; i < push_count; ++i) {
-		renderer->DrawTexturedRect(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), m_ob[i]->GetColorR(), m_ob[i]->GetColorG(), m_ob[i]->GetColorB(), 1, m_texCharacter);
+		renderer->DrawTexturedRect(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), m_ob[i]->GetColorR(), m_ob[i]->GetColorG(), m_ob[i]->GetColorB(), 1, m_texCharacter, m_ob[i]->GetLevel());
 
 
 	}
@@ -90,14 +111,14 @@ void SceneMgr::IsCollide(int num) {
 			
 			bool g = (m_ob[num]->GetType() == 1 && m_ob[i]->GetType() == 2);
 			//bool h =(m_ob[num]->GetType() == 2 && m_ob[i]->GetType() == 1);
-			//bool j = (m_ob[num]->GetType() == 3 && m_ob[i]->GetType() == 2);// || (m_ob[num]->GetType() == 2 && m_ob[i]->GetType() == 3);
+			bool j = (m_ob[num]->GetType() == 1 && m_ob[i]->GetType() == 3);// || (m_ob[num]->GetType() == 2 && m_ob[i]->GetType() == 3);
 			bool k = (m_ob[num]->GetType() == 2 && m_ob[i]->GetType() == 3);
-			//bool l = (m_ob[num]->GetType() == 1 && m_ob[i]->GetType() == 4);
+			bool l = (m_ob[num]->GetType() == 1 && m_ob[i]->GetType() == 4);
 			bool m = (m_ob[num]->GetType() == 2 && m_ob[i]->GetType() == 4);
 			//bool n = num != m_ob[i]->GetFollow();
 			
 			bool o = m_ob[num]->GetTeam() != m_ob[i]->GetTeam();
-			if (a&&b&&c&&d&&e&&o&&(g||k||m)) {
+			if (a&&b&&c&&d&&e&&o&&(g||k||m||j||l)) {
 				
 				collisionCount++;
 				
@@ -140,7 +161,9 @@ void SceneMgr::UpdateObj(float time) {
 			}
 		}
 		IsCollide(i);
-		if (m_ob[i]->GetLife() <= 0.0f) {
+		bool a = m_ob[i]->GetPosX() > 250 || m_ob[i]->GetPosX() < -250 || m_ob[i]->GetPosY() > 400 || m_ob[i]->GetPosY() < -400;
+		bool b = m_ob[i]->GetType() != 2;
+		if (m_ob[i]->GetLife() <= 0.0f ||(a&&b)) {
 			memset(m_ob[i], NULL, sizeof(Object));
 			dead_ob[i] = 1;
 		}

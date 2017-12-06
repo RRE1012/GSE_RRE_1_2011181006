@@ -70,7 +70,7 @@ void MouseInput(int button, int state, int x, int y)
 	}
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
 		if (g_LButtonDown) {
-			if(s_Mgr->GetCoolTime()>=3.0f && y>400)
+			if(y>400)
 			{
 				s_Mgr->AddActorObject(x - 250, -(y - 400), OBJECT_CHARACTER, 0);
 				s_Mgr->ResetCoolTime();
@@ -125,7 +125,7 @@ int main(int argc, char **argv)
 	//s_Mgr->AddActorObject(0, 0, OBJECT_ARROW);
 	//s_Mgr->AddActorObject(0, 0, OBJECT_CHARACTER);
 	//s_Mgr->MaxAdd();
-	Loop(1);
+	//Loop(1);
 	// Initialize Renderer
 	
 	//g_Renderer = new Renderer(500, 500);
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
 	glutMainLoop();
 	
 	//delete g_Renderer;
-
+	delete s_Mgr;
     return 0;
 }
 

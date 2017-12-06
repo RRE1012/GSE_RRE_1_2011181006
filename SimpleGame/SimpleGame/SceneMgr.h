@@ -15,13 +15,19 @@ class SceneMgr
 {
 	Renderer *renderer;
 	int push_count = 0;
-	int bull_count = 0;
+	int aniX_count = 0;
+	int aniY_count = 0;
 	float cooltime = 0;
 	float clickCooltime = 0;
 	Object* m_ob[MAX_OBJECTS_COUNT];
 	Object* bull_ob[MAX_OBJECTS_COUNT];
 	int dead_ob[MAX_OBJECTS_COUNT];
-	
+	GLuint m_texCharacter; 
+	GLuint m_texCharacter2; 
+	GLuint m_texCharacter3;
+	GLuint m_texCharacter4; 
+	GLuint m_texBackGround;
+	GLuint m_texParticle;
 
 public:
 	

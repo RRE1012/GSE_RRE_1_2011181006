@@ -7,6 +7,7 @@
 #define LEVEL_SKY 0.1
 #define LEVEL_GROUND 0.2
 #define LEVEL_UNDERGROUND 0.3
+#define LEVEL_WORST 0.9
 
 class Object
 {
@@ -14,6 +15,7 @@ private:
 	float posX, posY, posZ;
 	float objSize;
 	//pair<float, float> speed;
+	
 	float speedX, speedY;
 	float red, green, blue;
 	int count;
@@ -23,6 +25,11 @@ private:
 	int follow=0;
 	int team;
 	float level;
+	int aniXcount;
+	int aniYcount;
+	int aniWidth;
+	int aniHeight;
+	float e_time;
 public:
 	Object();
 	Object(float px, float py,int ty, int teamname);
@@ -49,6 +56,14 @@ public:
 	void SetPos(float, float, float);
 	int GetType();
 	float GetLife();
+	void SetAniCount(int sizeX,int sizeY);
+	int GetXCount();
+	int GetYCount();
+	int GetAniWidth();
+	int GetAniHeight();
+	float GetElapsedTime() {
+		return e_time;
+	}
 	void SetLife(float);
 	void SetFollow(int);
 	int GetFollow();

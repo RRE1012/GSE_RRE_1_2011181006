@@ -21,8 +21,14 @@ Object::Object()
 }
 Object::Object(float px, float py,int ty, int teamname)
 {
+	e_time = 0.0f;
 	posX = px;
 	posY = py;
+	aniXcount = 0;
+	aniYcount = 0;
+	aniHeight = 1;
+	aniWidth = 1;
+
 	speedX = 200.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
 	speedY = 200.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
 	team = teamname;
@@ -40,9 +46,20 @@ Object::Object(float px, float py,int ty, int teamname)
 	}
 	else if (ty == 2) 
 	{
+		if (teamname == TEAM_2) {
+			aniWidth = 6;
+			aniHeight = 7;
+
+		}
+		else {
+			aniWidth = 12;
+			aniHeight = 4;
+
+		}
+		
 		speedX = 300.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
 		speedY = 300.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
-		objSize = 20;
+		objSize = 100;
 		if (team == TEAM_1)
 		{
 			red = 1.0f;
@@ -132,6 +149,7 @@ Object::Object(float px, float py, float pz, float r, float g, float b, float si
 }
 Object::~Object()
 {
+
 }
 
 float Object::GetPosX() 
@@ -243,12 +261,12 @@ void Object::ReturnColor(int type)
 void Object::Update(float time) 
 {
 	float elapsedTime = time/1000.0f;
-	
-	if (count == 0) 
-	{
-		posX =posX+ (speedX*elapsedTime);
-		posY = posY +(speedY*elapsedTime);
-	}
+	e_time = e_time + elapsedTime;
+	count = (count + 1) % 50;
+	posX =posX+ (speedX*elapsedTime);
+	posY = posY +(speedY*elapsedTime);
+	if(count==10)
+		SetAniCount(aniWidth,aniHeight);
 	if (type == 2)
 	{
 		if (posX + (objSize / 2) > 250)
@@ -274,10 +292,29 @@ void Object::Update(float time)
 	}
 	
 }
-	
-		
-	
 
+void Object::SetAniCount(int x,int y) {
+	aniXcount = (aniXcount + 1) % x;
+	if (aniXcount == 0) {
+		aniYcount = (aniYcount + 1) % y;
+	}
+}
+
+int Object::GetXCount() {
+	return aniXcount;
+}
+	
+int Object::GetYCount() {
+	return aniYcount;
+}
+int Object::GetAniWidth() 
+{
+	return aniWidth;
+}
+int Object::GetAniHeight()
+{
+	return aniHeight;
+}
 float Object::GetLife() 
 {
 	return life;

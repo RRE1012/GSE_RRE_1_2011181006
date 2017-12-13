@@ -9,10 +9,12 @@ but WITHOUT ANY WARRANTY.
 */
 
 #include "stdafx.h"
+
 #include <iostream>
 #include "Dependencies\glew.h"
 #include "Dependencies\freeglut.h"
 #include "Renderer.h"
+#include "Sound.h"
 
 
 SceneMgr *s_Mgr=NULL; //포인터 NULL값으로 초기화 반드시 할 것
@@ -20,6 +22,7 @@ SceneMgr *s_Mgr=NULL; //포인터 NULL값으로 초기화 반드시 할 것
 
 bool g_LButtonDown = false;
 DWORD g_prevTime = 0;
+
 
 void RenderScene(void)
 {
@@ -31,7 +34,7 @@ void RenderScene(void)
 	
 
 	s_Mgr->DrawObject();
-	DWORD currTime = timeGetTime();
+	DWORD currTime = GetTickCount();
 	DWORD elapsedTime = currTime - g_prevTime;
 	
 	g_prevTime = currTime; //현재 elapse된 시간을 다시 갱신
@@ -113,6 +116,7 @@ int main(int argc, char **argv)
 	{
 		std::cout << "GLEW 3.0 not supported\n ";
 	}
+	
 	s_Mgr = new SceneMgr();
 	s_Mgr->AddActorObject(150,320, OBJECT_BUILDING,0);
 	s_Mgr->AddActorObject(0, 350, OBJECT_BUILDING, 0);
@@ -139,7 +143,7 @@ int main(int argc, char **argv)
 	glutKeyboardFunc(KeyInput);
 	glutMouseFunc(MouseInput);
 	glutSpecialFunc(SpecialKeyInput);
-	g_prevTime = timeGetTime();
+	g_prevTime = GetTickCount();
 	glutMainLoop();
 	
 	//delete g_Renderer;

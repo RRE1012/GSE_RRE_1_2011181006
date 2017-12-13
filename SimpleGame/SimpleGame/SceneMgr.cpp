@@ -5,6 +5,7 @@
 SceneMgr::SceneMgr()
 {
 	renderer = new Renderer(500, 800);
+	
 	if (!renderer->IsInitialized())
 	{
 		std::cout << "Renderer could not be initialized.. \n";
@@ -16,6 +17,12 @@ SceneMgr::SceneMgr()
 	m_texCharacter4 = renderer->CreatePngTexture("./Textures/Character_Team05.png");
 	 m_texBackGround = renderer->CreatePngTexture("./Textures/Background.png");
 	 m_texParticle = renderer->CreatePngTexture("./Textures/Character_Team.png");
+	 
+	 m_sound = new Sound();
+	 soundBG = m_sound->CreateSound("./SoundSamples/ophelia.mp3");
+	 m_sound->PlaySound(soundBG, true, 0.5f);
+	
+	 //m_sound->PlaySound(soundBG, true, 0.2f);
 
 }
 
@@ -25,6 +32,7 @@ SceneMgr::~SceneMgr()
 	for (int i = 0; i < push_count; ++i) {
 		delete m_ob[i];
 	}
+	delete m_sound;
 	delete renderer;
 }
 void SceneMgr::AddObject() {
@@ -52,15 +60,17 @@ int SceneMgr::GetPushNum() {
 	return push_count;
 }
 void SceneMgr::DrawObject() {
-	//aniX_count = (aniX_count +1)%6;
-	//if (aniX_count == 5) {
-	////	aniY_count = (aniY_count + 1) % 4;
-	//}
+	aniX_count = (aniX_count +1)%6;
+	
+	
+	char* tempchar = "Great Game";
 	
 	renderer->DrawTexturedRect(0, 0, 0, 800, 1, 1, 1, 1, m_texBackGround, LEVEL_WORST);
+	renderer->DrawText(0, 0, GLUT_STROKE_MONO_ROMAN, 0.0f, 0.0f, 1.0f, tempchar);
 	float a = 1;
 	for (int i = 0; i < push_count; ++i) {
 		if (m_ob[i]->GetType() == 1) {
+			
 			if (m_ob[i]->GetTeam() == TEAM_1) {
 				renderer->DrawTexturedRect(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), 1, 1, 1, a, m_texCharacter, m_ob[i]->GetLevel());
 				renderer->DrawSolidRectGauge(m_ob[i]->GetPosX(), m_ob[i]->GetPosY() + (m_ob[i]->GetSize() / 2), m_ob[i]->GetPosZ(), 50, 10, 0, 0, 1, a, m_ob[i]->GetLife()/500, 0.3);
@@ -69,12 +79,15 @@ void SceneMgr::DrawObject() {
 			else {
 				renderer->DrawTexturedRect(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(),1, 1, 1, a, m_texCharacter2, m_ob[i]->GetLevel());
 				renderer->DrawSolidRectGauge(m_ob[i]->GetPosX(), m_ob[i]->GetPosY() + (m_ob[i]->GetSize() / 2), m_ob[i]->GetPosZ(), 50, 10, 1, 0, 0, a, m_ob[i]->GetLife() / 500, 0.3);
+				
+
 			}
 		}
 		else if(m_ob[i]->GetType() == 2){
 
-			
+			renderer->SetSceneTransform(aniX_count, 0.0f, 2.0f, 1.0f);
 			if (m_ob[i]->GetTeam() == TEAM_2) {
+				
 				//renderer->DrawTexturedRect(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), 1, 1, 1, a, m_texCharacter3, m_ob[i]->GetLevel());
 				renderer->DrawTexturedRectSeq(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), 1, 1, 1, a, m_texCharacter3, m_ob[i]->GetXCount(), m_ob[i]->GetYCount(), m_ob[i]->GetAniWidth(), m_ob[i]->GetAniHeight(), m_ob[i]->GetLevel());
 				renderer->DrawSolidRectGauge(m_ob[i]->GetPosX(), m_ob[i]->GetPosY() + (m_ob[i]->GetSize() / 2), m_ob[i]->GetPosZ(), 50, 10, 1, 0, 0, a, m_ob[i]->GetLife() / 100, 0.3);
@@ -83,7 +96,6 @@ void SceneMgr::DrawObject() {
 
 				renderer->DrawSolidRectGauge(m_ob[i]->GetPosX(), m_ob[i]->GetPosY() + (m_ob[i]->GetSize() / 2), m_ob[i]->GetPosZ(), 50, 10, 0, 0, 1, a, m_ob[i]->GetLife() / 100, 0.3);
 				renderer->DrawTexturedRectSeq(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), 1, 1, 1, a, m_texCharacter4, m_ob[i]->GetXCount(), m_ob[i]->GetYCount(), m_ob[i]->GetAniWidth(), m_ob[i]->GetAniHeight(), m_ob[i]->GetLevel());
-
 //				renderer->DrawTexturedRect(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), 1, 1, 1, a, m_texCharacter4, m_ob[i]->GetLevel());
 			}
 		}
@@ -161,12 +173,25 @@ void SceneMgr::UpdateObj(float time) {
 		m_ob[i]->Cooltime(elapsedTime);
 		m_ob[i]->Update(time);
 		if (m_ob[i]->GetType() == 1 &&m_ob[i]->GetLife()>0) {
-			if (m_ob[i]->GetCoolTime() >= 2.0f) {
-				AddActorObject(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), 3,i);
-				m_ob[i]->ResetCoolTime();
+			if (m_ob[i]->GetLife() < 300.0f) { //체력이 300이하일 경우 총알 분배 속도 증가
+				if (m_ob[i]->GetCoolTime() >= 1.0f) {
+					AddActorObject(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), 3, i);
+					m_ob[i]->ResetCoolTime();
+				}
+			}
+			else {
+				if (m_ob[i]->GetCoolTime() >= 5.0f) {
+					AddActorObject(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), 3, i);
+					m_ob[i]->ResetCoolTime();
+				}
 			}
 		}
 		if (m_ob[i]->GetType() == 2 && m_ob[i]->GetLife()>0) {
+			//적군이 체력이 절반이하일 때, 속도가 점점 빨라지게 된다.
+			if (m_ob[i]->GetLife() < 60.0f &&m_ob[i]->GetTeam()==TEAM_2) {
+				m_ob[i]->SetSpeed(m_ob[i]->GetSpeedX() * 1.5f, m_ob[i]->GetSpeedY() * 1.5f);
+			}
+
 			if (m_ob[i]->GetCoolTime() >= 3.0f) {
 				AddActorObject(m_ob[i]->GetPosX(), m_ob[i]->GetPosY() , 4,i);
 				m_ob[i]->ResetCoolTime();

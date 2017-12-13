@@ -2,6 +2,7 @@
 #define MAX_OBJECTS_COUNT 256
 #include "Object.h"
 #include "Renderer.h"
+#include "Sound.h"
 #include "stdafx.h"
 #include <iostream>
 #include <map>
@@ -28,7 +29,8 @@ class SceneMgr
 	GLuint m_texCharacter4; 
 	GLuint m_texBackGround;
 	GLuint m_texParticle;
-
+	Sound* m_sound = nullptr;
+	int soundBG;
 public:
 	
 	void AddObject();

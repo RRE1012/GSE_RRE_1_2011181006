@@ -66,6 +66,10 @@ public:
 	}
 	void SetLife(float);
 	void SetFollow(int);
+	void SetSpeed(float a,float b) {
+		speedX = a;
+		speedY = b;
+	};
 	int GetFollow();
 	float GetLevel() { return level; };
 	void Update(float );

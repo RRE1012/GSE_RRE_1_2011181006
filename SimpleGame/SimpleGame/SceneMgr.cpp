@@ -17,12 +17,14 @@ SceneMgr::SceneMgr()
 	m_texCharacter4 = renderer->CreatePngTexture("./Textures/Character_Team05.png");
 	 m_texBackGround = renderer->CreatePngTexture("./Textures/Background.png");
 	 m_texParticle = renderer->CreatePngTexture("./Textures/Character_Team.png");
-	 
+	 m_texParticle_Snow = renderer->CreatePngTexture("./Textures/SnowParticle.png");
+	 m_texParticle_Rain = renderer->CreatePngTexture("./Textures/ParticleRain.png");
+
 	 m_sound = new Sound();
 	 soundBG = m_sound->CreateSound("./SoundSamples/ophelia.mp3");
 	 m_sound->PlaySound(soundBG, true, 0.5f);
 	
-	 //m_sound->PlaySound(soundBG, true, 0.2f);
+	 m_sound->PlaySound(soundBG, true, 0.2f);
 
 }
 
@@ -59,14 +61,21 @@ Object SceneMgr::GetObject0(int i) {
 int SceneMgr::GetPushNum() {
 	return push_count;
 }
-void SceneMgr::DrawObject() {
+void SceneMgr::DrawObject(float time) {
 	aniX_count = (aniX_count +1)%6;
-	
-	
+	float elapsedtime = time / 1000.0f;
+	snow_cooltime += elapsedtime;
 	char* tempchar = "Great Game";
 	
+		//DrawParticleCloud(0, 0, 0, 1, 1, 1, 1, 1, -0.1, -0.1, m_texParticle, time, 0.01);
+
 	renderer->DrawTexturedRect(0, 0, 0, 800, 1, 1, 1, 1, m_texBackGround, LEVEL_WORST);
 	renderer->DrawText(0, 0, GLUT_STROKE_MONO_ROMAN, 0.0f, 0.0f, 1.0f, tempchar);
+	renderer->DrawParticleClimate(0, 0, 0, 1, 1, 1, 1, 1, -0.1, -0.1, m_texParticle_Snow, snow_cooltime, LEVEL_GOD);
+	renderer->DrawParticleClimate(0, 10, 0, 1, 1, 1, 1, 1, 0.1, -0.8, m_texParticle_Rain, snow_cooltime/1.5f, LEVEL_GOD);
+	renderer->DrawParticleClimate(-100, -280, 0, 5, 1, 1, 1, 1, 0.1, -0.5, m_texParticle_Rain, snow_cooltime / 1.5f, LEVEL_GOD);
+	renderer->DrawParticleClimate(120, 230, 0, 5, 1, 1, 1, 1, 0.1, -0.6, m_texParticle_Rain, snow_cooltime / 1.5f, LEVEL_GOD);
+
 	float a = 1;
 	for (int i = 0; i < push_count; ++i) {
 		if (m_ob[i]->GetType() == 1) {
@@ -85,7 +94,7 @@ void SceneMgr::DrawObject() {
 		}
 		else if(m_ob[i]->GetType() == 2){
 
-			renderer->SetSceneTransform(aniX_count, 0.0f, 2.0f, 1.0f);
+			//renderer->SetSceneTransform(aniX_count, 0.0f, 2.0f, 1.0f);
 			if (m_ob[i]->GetTeam() == TEAM_2) {
 				
 				//renderer->DrawTexturedRect(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), 1, 1, 1, a, m_texCharacter3, m_ob[i]->GetLevel());
@@ -103,7 +112,10 @@ void SceneMgr::DrawObject() {
 			renderer->DrawSolidRect(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), m_ob[i]->GetColorR(), m_ob[i]->GetColorG(), m_ob[i]->GetColorB(), 1, m_ob[i]->GetLevel());
 		}
 		else {
-			renderer->DrawParticle(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), m_ob[i]->GetColorR(), m_ob[i]->GetColorG(), m_ob[i]->GetColorB(), 1,0,0, m_texParticle, m_ob[i]->GetElapsedTime());
+			if(m_ob[i]->GetTeam()==TEAM_2)
+				renderer->DrawParticle(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), m_ob[i]->GetColorR(), m_ob[i]->GetColorG(), m_ob[i]->GetColorB(), 1,0.5f,0.3f, m_texParticle, m_ob[i]->GetElapsedTime(), LEVEL_GROUND);
+			else
+				renderer->DrawParticle(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), m_ob[i]->GetColorR(), m_ob[i]->GetColorG(), m_ob[i]->GetColorB(), 1, -0.1f, -0.3f, m_texParticle, m_ob[i]->GetElapsedTime(), LEVEL_GROUND);
 			//renderer->DrawSolidRect(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), m_ob[i]->GetPosZ(), m_ob[i]->GetSize(), m_ob[i]->GetColorR(), m_ob[i]->GetColorG(), m_ob[i]->GetColorB(), 1, m_ob[i]->GetLevel());
 		}
 
@@ -174,13 +186,13 @@ void SceneMgr::UpdateObj(float time) {
 		m_ob[i]->Update(time);
 		if (m_ob[i]->GetType() == 1 &&m_ob[i]->GetLife()>0) {
 			if (m_ob[i]->GetLife() < 300.0f) { //체력이 300이하일 경우 총알 분배 속도 증가
-				if (m_ob[i]->GetCoolTime() >= 1.0f) {
+				if (m_ob[i]->GetCoolTime() >= 0.5f) {
 					AddActorObject(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), 3, i);
 					m_ob[i]->ResetCoolTime();
 				}
 			}
 			else {
-				if (m_ob[i]->GetCoolTime() >= 5.0f) {
+				if (m_ob[i]->GetCoolTime() >= 1.0f) {
 					AddActorObject(m_ob[i]->GetPosX(), m_ob[i]->GetPosY(), 3, i);
 					m_ob[i]->ResetCoolTime();
 				}

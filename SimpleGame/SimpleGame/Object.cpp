@@ -43,6 +43,7 @@ Object::Object(float px, float py,int ty, int teamname)
 		life = 500.0f;
 		level = LEVEL_SKY;
 		posZ = 0;
+		e_time = 0.0f;
 	}
 	else if (ty == 2) 
 	{
@@ -261,14 +262,16 @@ void Object::ReturnColor(int type)
 void Object::Update(float time) 
 {
 	float elapsedTime = time/1000.0f;
-	e_time = e_time + elapsedTime;
-	count = (count + 1) % 50;
+	if(life>0)
+		e_time = e_time + elapsedTime;
+	count = (count + 1) % 30;
 	posX =posX+ (speedX*elapsedTime);
 	posY = posY +(speedY*elapsedTime);
-	if(count==10)
-		SetAniCount(aniWidth,aniHeight);
+	
 	if (type == 2)
 	{
+		if (count == 10)
+			SetAniCount(aniWidth, aniHeight);
 		if (posX + (objSize / 2) > 250)
 		{
 			speedX = speedX*(-1);

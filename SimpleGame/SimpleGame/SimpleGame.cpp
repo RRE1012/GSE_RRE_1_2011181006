@@ -33,10 +33,10 @@ void RenderScene(void)
 	// Renderer Test
 	
 
-	s_Mgr->DrawObject();
+	
 	DWORD currTime = GetTickCount();
 	DWORD elapsedTime = currTime - g_prevTime;
-	
+	s_Mgr->DrawObject(elapsedTime);
 	g_prevTime = currTime; //현재 elapse된 시간을 다시 갱신
 //2017.09->	g_Renderer->DrawSolidRect(s_Mgr.GetObject0(i).GetPosX(), s_Mgr.GetObject0(i).GetPosY(), s_Mgr.GetObject0(i).GetPosZ(), s_Mgr.GetObject0(i).GetSize(), s_Mgr.GetObject0(i).GetColorR(), s_Mgr.GetObject0(i).GetColorG(), s_Mgr.GetObject0(i).GetColorB(), 1);
 	s_Mgr->UpdateObj(elapsedTime);

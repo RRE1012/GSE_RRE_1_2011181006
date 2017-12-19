@@ -29,6 +29,9 @@ class SceneMgr
 	GLuint m_texCharacter4; 
 	GLuint m_texBackGround;
 	GLuint m_texParticle;
+	GLuint m_texParticle_Snow;
+	GLuint m_texParticle_Rain;
+	float snow_cooltime = 0.0f;
 	Sound* m_sound = nullptr;
 	int soundBG;
 public:
@@ -42,7 +45,7 @@ public:
 	Object GetObject0(int);
 	int GetPushNum();
 	void IsCollide(int);
-	void DrawObject();
+	void DrawObject(float);
 	void DrawObjectPNG();
 	void MakeShootBullet(Object&);
 	void AddTime(float);

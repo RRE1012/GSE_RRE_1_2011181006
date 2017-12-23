@@ -21,6 +21,7 @@ SceneMgr *s_Mgr=NULL; //포인터 NULL값으로 초기화 반드시 할 것
 
 
 bool g_LButtonDown = false;
+bool g_RButtonDown = false;
 DWORD g_prevTime = 0;
 
 
@@ -56,8 +57,6 @@ void Loop(int state) {
 void Idle(void)
 {
 	RenderScene();
-	
-
 }
 
 
@@ -72,15 +71,41 @@ void MouseInput(int button, int state, int x, int y)
 
 	}
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
+		//특정 위치에 마우스 클릭 시 아군 생성
 		if (g_LButtonDown) {
-			if(y>400)
+			if(y>WINSIZEY/2)
 			{
-				s_Mgr->AddActorObject(x - 250, -(y - 400), OBJECT_CHARACTER, 0);
-				s_Mgr->ResetCoolTime();
+				if (y > 650 && s_Mgr->GetCoolTime() >= 2.0f) {
+					s_Mgr->AddActorObject(x - (WINSIZEX / 2), -(y - (WINSIZEY / 2)), OBJECT_CHARACTER, 0);
+					s_Mgr->ResetCoolTime();
+				}
+				else if (y <= 650 && s_Mgr->GetCoolTime2() >= 1.0f) {
+					s_Mgr->AddActorObject(x - (WINSIZEX / 2), -(y - (WINSIZEY / 2)), OBJECT_ROBOT, 0);
+					s_Mgr->ResetCoolTime2();
+				}
 			}
 			
 			//obj.SetPos(x-250, -(y-250), obj.GetPosZ());
 			printf("x : %d\ny : %d\n", x,y);
+			g_LButtonDown = false;
+		}
+	}
+	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+		g_RButtonDown = true;
+	if (button == GLUT_RIGHT_BUTTON && state == GLUT_UP) {
+		//특정 위치에 마우스 클릭 시 아군 생성
+		if (g_RButtonDown) {
+			if (y>(WINSIZEY / 2)&& s_Mgr->GetCoolTime3() >= 7.0f)
+			{
+				if (x - (WINSIZEX / 2)>0)
+					s_Mgr->AddActorObject(x - (WINSIZEX / 2), -(y - (WINSIZEY / 2)), OBJECT_TANK, 0);
+				else
+					s_Mgr->AddActorObject(x - (WINSIZEX / 2), -(y - (WINSIZEY / 2)), OBJECT_TANK, 0);
+				s_Mgr->ResetCoolTime3();
+			}
+
+			//obj.SetPos(x-250, -(y-250), obj.GetPosZ());
+			printf("x : %d\ny : %d\n", x, y);
 			g_LButtonDown = false;
 		}
 	}
@@ -104,7 +129,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);
-	glutInitWindowSize(500, 800);
+	glutInitWindowSize(WINSIZEX, WINSIZEY);
 	glutCreateWindow("Game Software Engineering KPU");
 	
 	glewInit();
@@ -125,18 +150,6 @@ int main(int argc, char **argv)
 	s_Mgr->AddActorObject(0, -350, OBJECT_BUILDING, 0);
 	s_Mgr->AddActorObject(-150, -320, OBJECT_BUILDING, 0);
 
-	//s_Mgr->AddActorObject(0, 0, OBJECT_BULLET);
-	//s_Mgr->AddActorObject(0, 0, OBJECT_ARROW);
-	//s_Mgr->AddActorObject(0, 0, OBJECT_CHARACTER);
-	//s_Mgr->MaxAdd();
-	//Loop(1);
-	// Initialize Renderer
-	
-	//g_Renderer = new Renderer(500, 500);
-//	if (!g_Renderer->IsInitialized())
-//	{
-	//	std::cout << "Renderer could not be initialized.. \n";
-	//}
 	
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);

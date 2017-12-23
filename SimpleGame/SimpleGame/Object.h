@@ -3,11 +3,7 @@
 //#include <utility>
 #define TEAM_1 1001
 #define TEAM_2 2002
-#define LEVEL_GOD 0
-#define LEVEL_SKY 0.1
-#define LEVEL_GROUND 0.2
-#define LEVEL_UNDERGROUND 0.3
-#define LEVEL_WORST 0.9
+
 
 class Object
 {

@@ -39,7 +39,7 @@ Object::Object(float px, float py,int ty, int teamname)
 		objSize = 100;
 		red = 1.0f;
 		green = 1.0f;
-		blue = 0.0f;
+		blue = 1.0f;
 		life = 500.0f;
 		level = LEVEL_SKY;
 		posZ = 0;
@@ -50,48 +50,41 @@ Object::Object(float px, float py,int ty, int teamname)
 		if (teamname == TEAM_2) {
 			aniWidth = 6;
 			aniHeight = 7;
-
+			speedY = -300.f *(((float)std::rand() / (float)RAND_MAX));
 		}
 		else {
 			aniWidth = 12;
 			aniHeight = 4;
-
+			speedY = 300.f *(((float)std::rand() / (float)RAND_MAX));
 		}
 		
 		speedX = 300.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
-		speedY = 300.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
-		objSize = 100;
-		if (team == TEAM_1)
-		{
-			red = 1.0f;
-			green = 0.0f;
-			blue = 0.0f;
-		}
-		else
-		{
-			red = 0.0f;
-			green = 0.0f;
-			blue = 1.0f;
-		}
+		red = 1.0f;
+		green = 1.0f;
+		blue = 1.0f;
+		objSize = 50;
+	
 		life = 100.0f;
 		level = LEVEL_GROUND;
 	}
 	else if (ty == 3) 
 	{
 		speedX = 600.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
-		speedY = 600.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
+		
 		objSize = 5;
 		if (team == TEAM_1)
-		{
-			red = 1.0f;
-			green = 0.0f;
-			blue = 0.0f;
-		}
-		else
 		{
 			red = 0.0f;
 			green = 0.0f;
 			blue = 1.0f;
+			speedY = 600.f *(((float)std::rand() / (float)RAND_MAX));
+		}
+		else
+		{
+			red = 1.0f;
+			green = 0.0f;
+			blue = 0.0f;
+			speedY = -600.f *(((float)std::rand() / (float)RAND_MAX));
 		}
 		life = 20.0f;
 		level = LEVEL_UNDERGROUND;
@@ -99,22 +92,61 @@ Object::Object(float px, float py,int ty, int teamname)
 	else if (ty == 4)
 	{
 		speedX = 100.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
-		speedY = 100.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
+		
 		objSize = 10;
 		if (team == TEAM_1)
 		{
 			red = 0.5f;
 			green = 0.2f;
 			blue = 0.7f;
+			speedY = 100.f *(((float)std::rand() / (float)RAND_MAX));
 		}
 		else
 		{
 			red = 1.0f;
 			green = 1.0f;
 			blue = 0.0f;
+			speedY = -100.f *(((float)std::rand() / (float)RAND_MAX));
 		}
 		life = 10.0f;
 		level = LEVEL_UNDERGROUND;
+	}
+	else if (ty == 5)
+	{
+		
+		aniWidth = 8;
+		aniHeight = 3;
+		speedY = 300.f *(((float)std::rand() / (float)RAND_MAX));
+		
+
+		speedX = 300.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
+		red = 1.0f;
+		green = 1.0f;
+		blue = 1.0f;
+		objSize = 50;
+		team = TEAM_1;
+		life = 50.0f;
+		level = LEVEL_GROUND;
+	}
+	else if (ty == 6) {
+		speedY = 0.f;
+		speedX = 50.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
+		red = 1.0f;
+		green = 1.0f;
+		blue = 1.0f;
+		objSize = 80;
+		team = TEAM_1;
+		life = 500.0f;
+		level = LEVEL_GROUND;
+	}//느리지만 강력한 탱크
+	else if (ty == 7) {
+		aniWidth = 3;
+		speedX = 0.f;
+		speedY = 200.0f;
+		objSize = 30;
+		team = TEAM_1;
+		life = 100.0f;
+		level = LEVEL_GROUND;
 	}
 	
 	count = 0;
@@ -268,26 +300,26 @@ void Object::Update(float time)
 	posX =posX+ (speedX*elapsedTime);
 	posY = posY +(speedY*elapsedTime);
 	
-	if (type == 2)
+	if (type == 2 || type == OBJECT_ROBOT ||type==OBJECT_TANK)
 	{
 		if (count == 10)
 			SetAniCount(aniWidth, aniHeight);
-		if (posX + (objSize / 2) > 250)
+		if (posX + (objSize / 2) > WINSIZEX/2)
 		{
 			speedX = speedX*(-1);
 
 		}
-		else if (posX - (objSize / 2) < -250)
+		else if (posX - (objSize / 2) < -WINSIZEX/2)
 		{
 			speedX = speedX*(-1);
 
 		}
-		if (posY + (objSize / 2) > 400)
+		if (posY + (objSize / 2) > WINSIZEY/2)
 		{
 			speedY = speedY*(-1);
 
 		}
-		else if (posY - (objSize / 2) < -400)
+		else if (posY - (objSize / 2) < -WINSIZEY/2)
 		{
 			speedY = speedY*(-1);
 
